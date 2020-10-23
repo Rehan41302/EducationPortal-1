@@ -3,6 +3,9 @@
     "name": "native",
     "slug": "native",
     "version": "1.0.0",
+    "platforms": [
+      "web"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,6 +24,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "description": "",
+    "android": {
+      "package": "com.ayyan.native"
     }
   }
 }
