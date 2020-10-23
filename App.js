@@ -18,49 +18,70 @@ import QuizAttempt from './components/studentdashboard/QuizAttempt'
 // or any pure javascript modules available in npm
 import { Card } from 'react-native-paper';
 import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import {createStackNavigator} from '@react-navigation/stack'
 import TutorSignUp from './components/TutorSignup';
 import StudentSignUp from './components/StudentSignup';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
+const Tabs = createBottomTabNavigator();
+const RootStack = createStackNavigator()
+
+const initialTabsStack = () => {
+  return (
+      <Tabs.Navigator>
+          <Tabs.Screen name='Explore'  component={StudentRegister} />
+          {/* <Tabs.Screen name='Sell' options={{
+              // tabBarButton: () => SellBtn
+          }}  component={StudentLogin} /> */}
+          <Tabs.Screen name='MyAds'  component={TutorLogin} />
+          <Tabs.Screen name='Account'  component={TutorRegister} />
+      </Tabs.Navigator>
+  )
+}
 
 export default class App extends React.Component {
   render() {
     return (
-      
-      <QuizUpload />
+      <NavigationContainer>
+        <RootStack.Navigator>
+            <RootStack.Screen name='Home' options={{
+                 headerShown:false
+             }} component={initialTabsStack} />  
+        </RootStack.Navigator>
+      </NavigationContainer>
+      // <QuizUpload />
 
-      
-      
-      
+
       
           );
   }
 }
 
-const navigator = createStackNavigator({
-  tutorlogin: {
-    screen:TutorLogin ,
+// const navigator = createStackNavigator({
+//   tutorlogin: {
+//     screen:TutorLogin ,
     
-  },
-  tutorregister: {
-    screen:TutorRegister ,
+//   },
+//   tutorregister: {
+//     screen:TutorRegister ,
     
-  },
-  studentlogin:{
-    screen:StudentLogin,
-  },
-  studentregister:{
-    screen:StudentRegister,
-  },
-  tutorsignup:{
-    screen:TutorSignUp,
-  },
-  studentsignup:{
-    screen:StudentSignUp,
-  }
-});
+//   },
+//   studentlogin:{
+//     screen:StudentLogin,
+//   },
+//   studentregister:{
+//     screen:StudentRegister,
+//   },
+//   tutorsignup:{
+//     screen:TutorSignUp,
+//   },
+//   studentsignup:{
+//     screen:StudentSignUp,
+//   }
+// });
 
-const AppContainer = createAppContainer(navigator);
+// const AppContainer = createAppContainer(navigator);
 
 
 
