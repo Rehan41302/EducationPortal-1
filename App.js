@@ -1,66 +1,79 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
-import Constants from 'expo-constants';
-import fire from './config/fire';
+import * as React from "react";
+import { Text, View, StyleSheet, Image } from "react-native";
+import Constants from "expo-constants";
+import fire from "./config/fire";
 
 // You can import from local files
-import TutorLogin from './components/TutorLogin';
-import TutorRegister from './components/TutorRegister';
-import StudentLogin from './components/StudentLogin';
-import StudentRegister from './components/StudentRegister';
-import TutorProfile from './components/tutordashboard/TutorProfile';
-import StudentProfile from './components/studentdashboard/StudentProfile'
-import QuizUpload from './components/tutordashboard/QuizUpload'
-import OnlineClass from './components/tutordashboard/OnlineClass'
-import StudentClass from './components/studentdashboard/StudentClass'
-import QuizAttempt from './components/studentdashboard/QuizAttempt'
+import TutorLogin from "./components/TutorLogin";
+import TutorRegister from "./components/TutorRegister";
+import StudentLogin from "./components/StudentLogin";
+import StudentRegister from "./components/StudentRegister";
+import TutorProfile from "./components/tutordashboard/TutorProfile";
+import StudentProfile from "./components/studentdashboard/StudentProfile";
+import QuizUpload from "./components/tutordashboard/QuizUpload";
+import OnlineClass from "./components/tutordashboard/OnlineClass";
+import StudentClass from "./components/studentdashboard/StudentClass";
+import QuizAttempt from "./components/studentdashboard/QuizAttempt";
 
 // or any pure javascript modules available in npm
-import { Card } from 'react-native-paper';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import TutorSignUp from './components/TutorSignup';
-import StudentSignUp from './components/StudentSignup';
-
+import {
+  DefaultTheme,
+  Provider as PaperProvider,
+  Card
+} from "react-native-paper";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import TutorSignUp from "./components/TutorSignup";
+import StudentSignUp from "./components/StudentSignup";
 
 export default class App extends React.Component {
   render() {
+    const theme = {
+      ...DefaultTheme,
+      // Specify custom property
+      myOwnProperty: true,
+      // Specify custom property in nested object
+      colors: {
+        myOwnColor: "#BADA55"
+      }
+    };
     return (
-      
-      <QuizUpload />
-
-      
-      
-      
-      
-          );
+      // <QuizUpload />
+      <PaperProvider theme={theme}>
+        <AppContainer />
+        {/* <OnlineClass /> */}
+      </PaperProvider>
+      // <TutorLogin />
+      // <StudentClass />
+    );
   }
 }
 
 const navigator = createStackNavigator({
   tutorlogin: {
-    screen:TutorLogin ,
-    
+    screen: TutorLogin
   },
   tutorregister: {
-    screen:TutorRegister ,
-    
+    screen: TutorRegister
   },
-  studentlogin:{
-    screen:StudentLogin,
+  tutorprofile: {
+    screen: TutorProfile
   },
-  studentregister:{
-    screen:StudentRegister,
+  onlineclass: {
+    screen: OnlineClass
   },
-  tutorsignup:{
-    screen:TutorSignUp,
+  studentlogin: {
+    screen: StudentLogin
   },
-  studentsignup:{
-    screen:StudentSignUp,
+  studentregister: {
+    screen: StudentRegister
+  },
+  tutorsignup: {
+    screen: TutorSignUp
+  },
+  studentsignup: {
+    screen: StudentSignUp
   }
 });
 
 const AppContainer = createAppContainer(navigator);
-
-
-
