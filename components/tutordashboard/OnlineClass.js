@@ -30,7 +30,7 @@ export default class OnlineClass extends React.Component {
 
   clearInputs = () => {
     this.setState({
-      course: "",
+      // course: "",
       timing: "",
       zoomLink: "",
       error: {}
@@ -40,7 +40,7 @@ export default class OnlineClass extends React.Component {
   isValid = () => {
     const { course, timing, zoomLink } = this.state;
     let noError = true;
-    if (!course || !timing || !zoomLink) {
+    if (!timing || !zoomLink) {
       this.setState(({ errors }) => ({
         errors: { ...errors, emptyError: "All Fields are required." }
       }));
@@ -66,7 +66,7 @@ export default class OnlineClass extends React.Component {
       const db = firebase.firestore();
       db.collection("onlineclasses")
         .add({
-          course,
+          // course,
           timing,
           zoomLink,
           uploadTime: firestore.Timestamp.now()
@@ -88,7 +88,7 @@ export default class OnlineClass extends React.Component {
   render() {
     const { course, timing, zoomLink, loading, errors } = this.state;
     console.log({ props: this.props });
-    let btnDisabled = course && timing && zoomLink && !loading ? false : true;
+    let btnDisabled = timing && zoomLink && !loading ? false : true;
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.htext}>Online Class</Text>
@@ -112,7 +112,7 @@ export default class OnlineClass extends React.Component {
             <Text style={styles.emptyError}>{errors.emptyError}</Text>
           )}
         </View>
-        <View>
+        {/* <View>
           <Text style={styles.label}>Course</Text>
           <TextInput
             style={styles.inputBox}
@@ -125,7 +125,7 @@ export default class OnlineClass extends React.Component {
               this.setState({ course: text });
             }}
           />
-        </View>
+        </View> */}
         <View>
           <Text style={styles.label}>Time</Text>
           <TextInput

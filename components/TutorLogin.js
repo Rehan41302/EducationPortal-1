@@ -11,8 +11,9 @@ import {
   Alert
 } from "react-native";
 import * as firebase from "firebase";
+import { connect } from "react-redux";
 
-export default class TutorLogin extends React.Component {
+class TutorLogin extends React.Component {
   state = {
     email: "",
     password: ""
@@ -35,6 +36,8 @@ export default class TutorLogin extends React.Component {
   }
 
   render() {
+    if (this.props.isAuthenticated)
+      this.props.navigation.replace("tutorprofile");
     return (
       <ImageBackground
         style={styles.container}
@@ -97,6 +100,14 @@ export default class TutorLogin extends React.Component {
     );
   }
 }
+const mapStateToProps = state => {
+  console.log({ state });
+  return {
+    user: state.authReducer.user,
+    isAuthenticated: state.authReducer.isAuthenticated
+  };
+};
+export default connect(mapStateToProps)(TutorLogin);
 
 const styles = StyleSheet.create({
   container: {

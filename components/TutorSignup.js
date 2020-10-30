@@ -16,19 +16,33 @@ import * as firebase from "firebase";
 export default class TutorSignUp extends React.Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    loading: false
   };
   static navigationOption = {
     title: "Sign up"
   };
   userSignup(email, pass) {
     console.log(this.state);
+    this.setState({ loading: true });
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, pass)
-      .then(() => {
-        console.log("THEN");
-        this.props.navigation.replace("tutorlogin");
+      .then(res => {
+        console.log("THEN", res.user.uid);
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(res.user.uid)
+          .set({
+            id: res.user.uid,
+            role: "tutor"
+          })
+          .then(() => {
+            this.props.navigation.replace("tutordetails");
+          })
+          // this.props.navigation.replace("tutorlogin");
+          .catch(error => Alert.alert(error.message));
       })
       .catch(error => {
         console.log("CATCH", error);
@@ -68,11 +82,14 @@ export default class TutorSignUp extends React.Component {
 
           <TouchableOpacity
             style={styles.button}
+            disabled={this.state.loading}
             onPress={() => {
               this.userSignup(this.state.email, this.state.password);
             }}
           >
-            <Text style={styles.buttonText}>submit</Text>
+            <Text style={styles.buttonText}>
+              {this.state.loading ? "Loading..." : "submit"}
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
