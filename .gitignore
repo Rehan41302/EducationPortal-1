@@ -32,6 +32,7 @@ local.properties
 # node.js
 #
 node_modules/
+**/node_modules
 npm-debug.log
 yarn-error.log
 
@@ -79,3 +80,5 @@ yarn-error.log*
 
 # CocoaPods
 /ios/Pods/
+node_modules
+node_modules
