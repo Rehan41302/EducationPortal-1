@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground,Alert } from 'react-native';
-
+import firebase from '../config/fire'
 export default class TutorLogin extends React.Component {
 state={
   email:"",
@@ -10,12 +10,18 @@ static navigationOptions={
   title:"Login"
 }
 userSignin(email,pass){
+  console.log('rel',)
+  Alert.alert(email)
+
   firebase.auth().signInWithEmailAndPassword(email,pass)
-  .then(()=>{
+  .then((res)=>{
+    console.log(res)
     this.props.navigation.replace("tutorlogin")
   })
   .catch(error=>{
     Alert.alert(error.message)
+    alert(error.message)
+    console.log('rel',)
 
   })
 }
