@@ -36,8 +36,9 @@ class TutorLogin extends React.Component {
   }
 
   render() {
+    console.log(this.props.navigation)
     if (this.props.isAuthenticated)
-      this.props.navigation.replace("tutorprofile");
+      this.props.navigation.replace("Tutor Profile");
     return (
       <ImageBackground
         style={styles.container}
@@ -85,13 +86,16 @@ class TutorLogin extends React.Component {
 
           <Text style={{ textAlign: "center" }}>Don't have any account? </Text>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("tutorsignup")}
+            onPress={() => this.props.navigation.navigate('Tutor Signup' , {
+              screen: 'Tutor Signup',
+              params:{title:'Search History'}
+          } )}
           >
             <Text style={styles.touchtext}>Signup</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("studentlogin")}
+            onPress={() => this.props.navigation.navigate("Student Login")}
           >
             <Text style={styles.touchtext}>Are You Student?</Text>
           </TouchableOpacity>

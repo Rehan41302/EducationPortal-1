@@ -39,7 +39,7 @@ export default class TutorSignUp extends React.Component {
             role: "tutor"
           })
           .then(() => {
-            this.props.navigation.replace("tutordetails");
+            this.props.navigation.replace("Tutor Details");
           })
           // this.props.navigation.replace("tutorlogin");
           .catch(error => Alert.alert(error.message));

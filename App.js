@@ -28,12 +28,90 @@ import QuizAttempt from "./components/studentdashboard/QuizAttempt";
 
 // or any pure javascript modules available in npm
 import { Card } from "react-native-paper";
-import { createAppContainer, withNavigation } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+// import { createAppContainer, withNavigation } from "react-navigation";
+// import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from '@react-navigation/stack'
 import TutorSignUp from "./components/TutorSignup";
 import StudentSignUp from "./components/StudentSignup";
 import { signInAction } from "./store/actions/userActions";
 
+const TutorTabs = createBottomTabNavigator();
+const Tabs = createBottomTabNavigator();
+const StudentTabs = createBottomTabNavigator();
+const RootStack = createStackNavigator()
+const TutorAuthStackScreen = createStackNavigator()
+const StudentAuthStackScreen = createStackNavigator()
+
+const TutorAuthStack = () => {
+  return (
+    <TutorAuthStackScreen.Navigator>
+      <TutorAuthStackScreen.Screen name='Tutor login' options={{
+          headerShown:false
+      }} component={TutorLogin} />
+      <TutorAuthStackScreen.Screen name='Tutor Signup' options={{
+          headerShown:false
+      }} component={TutorSignUp} />
+      {/* <TutorAuthStackScreen.Screen name='Detail' component={Detail} 
+      options={({route}) => ({title:route.params.title})} /> */}
+  </TutorAuthStackScreen.Navigator>
+  )
+}
+
+const StudentAuthStack = () => {
+  return (
+    <StudentAuthStackScreen.Navigator>
+      <StudentAuthStackScreen.Screen name='Student login' options={{
+          headerShown:false
+      }} component={StudentLogin} />
+      <StudentAuthStackScreen.Screen name='Student Signup' options={{
+          headerShown:false
+      }} component={StudentSignUp} />
+      {/* <StudentAuthStackScreen.Screen name='Detail' component={Detail} 
+      options={({route}) => ({title:route.params.title})} /> */}
+  </StudentAuthStackScreen.Navigator>
+  )
+}
+
+const TutorAccountStack = () => {
+  return (
+      <TutorTabs.Navigator>
+          <TutorTabs.Screen name='Tutor Details'  component={TutorDetails} />
+          {/* <TutorTabs.Screen name='Sell' options={{
+              // tabBarButton: () => SellBtn
+          }}  component={StudentLogin} /> */}
+          <TutorTabs.Screen name='Tutor Profile'  component={TutorProfile} />
+      </TutorTabs.Navigator>
+  )
+}
+
+const StudentAccountStack = () => {
+  return (
+      <StudentTabs.Navigator>
+          <StudentTabs.Screen name='Student Details'  component={StudentRegister} />
+          {/* <StudentTabs.Screen name='Sell' options={{
+              // tabBarButton: () => SellBtn
+          }}  component={StudentLogin} /> */}
+          <StudentTabs.Screen name='Student Profile'  component={StudentProfile} />
+      </StudentTabs.Navigator>
+  )
+}
+
+const auth = () => {
+  return (
+      <Tabs.Navigator>
+          {/* <Tabs.Screen name='Explore'  component={StudentRegister} /> */}
+          <Tabs.Screen name='Tutor Login'  component={TutorAuthStack} />
+          {/* <Tabs.Screen name='Sell' options={{
+              // tabBarButton: () => SellBtn
+          }}  component={StudentLogin} /> */}
+          <Tabs.Screen name='Student Login'  component={StudentAuthStack} />
+          {/* <Tabs.Screen name='Account'  component={TutorRegister} /> */}
+      </Tabs.Navigator>
+  )
+}
 class App extends React.Component {
   state = {
     user: undefined,
@@ -125,11 +203,12 @@ class App extends React.Component {
       } else {
         // this.props.navigation.replace("tutorlogin");
         console.log("SIGNED OUT");
-        this.setState({ pageLoading: false });
+        this.setState({ pageLoading: false,user:false });
       }
     });
   }
   render() {
+    console.log(this.state.user)
     return (
       // <QuizUpload />
       // <Quiz />
@@ -139,7 +218,22 @@ class App extends React.Component {
             <ActivityIndicator size="large" height="100%" />
           </View>
         ) : (
-          <AppContainer />
+          <NavigationContainer> 
+          <RootStack.Navigator>
+              {this.state.user == false ? 
+              <RootStack.Screen name='Auth' options={{
+                headerShown:false
+            }} component={auth} />  :
+            this.state.user?.role == 'tutor' ?
+              <RootStack.Screen name='Tutor Account' options={{
+                   headerShown:false
+              }} component={TutorAccountStack} />:
+              this.state.user?.role == 'student' ?
+              <RootStack.Screen name='Student Account' options={{
+                headerShown:false
+           }} component={StudentAccountStack} /> : void 0}  
+          </RootStack.Navigator>
+        </NavigationContainer>
         )}
         {/* <TutorDetails /> */}
       </Provider>
@@ -154,35 +248,35 @@ const styles = StyleSheet.create({
   }
 });
 
-const navigator = createStackNavigator({
-  tutorlogin: {
-    screen: TutorLogin
-  },
-  tutorregister: {
-    screen: TutorRegister
-  },
-  tutordetails: {
-    screen: TutorDetails
-  },
-  tutorprofile: {
-    screen: TutorProfile
-  },
-  onlineclass: {
-    screen: OnlineClass
-  },
-  studentlogin: {
-    screen: StudentLogin
-  },
-  studentregister: {
-    screen: StudentRegister
-  },
-  tutorsignup: {
-    screen: TutorSignUp
-  },
-  studentsignup: {
-    screen: StudentSignUp
-  }
-});
+// const navigator = createStackNavigator({
+//   tutorlogin: {
+//     screen: TutorLogin
+//   },
+//   tutorregister: {
+//     screen: TutorRegister
+//   },
+//   tutordetails: {
+//     screen: TutorDetails
+//   },
+//   tutorprofile: {
+//     screen: TutorProfile
+//   },
+//   onlineclass: {
+//     screen: OnlineClass
+//   },
+//   studentlogin: {
+//     screen: StudentLogin
+//   },
+//   studentregister: {
+//     screen: StudentRegister
+//   },
+//   tutorsignup: {
+//     screen: TutorSignUp
+//   },
+//   studentsignup: {
+//     screen: StudentSignUp
+//   }
+// });
 
-const AppContainer = createAppContainer(withNavigation(navigator));
+// const AppContainer = createAppContainer(withNavigation(navigator));
 export default App;

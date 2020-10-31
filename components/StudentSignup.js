@@ -1,6 +1,53 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground,Button } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+  Button,
+  Alert
+} from "react-native";import * as firebase from "firebase";
+
 export default class  StudentSignup extends React.Component{
+  state = {
+    email: "",
+    password: "",
+    loading: false
+  };
+  static navigationOption = {
+    title: "Sign up"
+  };
+  userSignup(email, pass) {
+    console.log(this.state);
+    this.setState({ loading: true });
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, pass)
+      .then(res => {
+        console.log("THEN", res.user.uid);
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(res.user.uid)
+          .set({
+            id: res.user.uid,
+            role: "student"
+          })
+          .then(() => {
+            this.props.navigation.replace("Student Details");
+          })
+          // this.props.navigation.replace("tutorlogin");
+          .catch(error => Alert.alert(error.message));
+      })
+      .catch(error => {
+        console.log("CATCH", error);
+        Alert.alert(error.message);
+      });
+  }
 render(){
      return(
         <ImageBackground style={styles.container} source={require('../assets/image/signup.jpg')}>
@@ -13,14 +60,17 @@ render(){
               placeholder="Email"
               placeholderTextColor = "#ffffff"
               selectionColor="#fff"
-              keyboardType="email-address"/>
+              keyboardType="email-address"
+              value={this.state.email}
+              onChangeText={text => this.setState({ email: text })}/>
        
        <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Password"
               secureTextEntry={true}
               placeholderTextColor = "#ffffff"
-              
+              value={this.state.password}
+              onChangeText={text => this.setState({ password: text })}
               /> 
 
 <TextInput style={styles.inputBox} 
@@ -31,9 +81,18 @@ render(){
               
               /> 
                 
-                <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('studentlogin')} >
-             <Text style={styles.buttonText} >submit</Text>
-           </TouchableOpacity>
+                <TouchableOpacity
+            style={styles.button}
+            disabled={this.state.loading}
+            onPress={() => {
+              this.userSignup(this.state.email, this.state.password);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {this.state.loading ? "Loading..." : "submit"}
+            </Text>
+          </TouchableOpacity>
+        
 
 </View>
 
