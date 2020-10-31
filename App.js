@@ -131,18 +131,18 @@ class App extends React.Component {
   }
   render() {
     return (
-      // <QuizUpload />
+      <QuizUpload />
       // <Quiz />
-      <Provider store={store}>
-        {this.state.pageLoading ? (
-          <View style={styles.loaderView}>
-            <ActivityIndicator size="large" height="100%" />
-          </View>
-        ) : (
-          <AppContainer />
-        )}
-        {/* <TutorDetails /> */}
-      </Provider>
+      // <Provider store={store}>
+      //   {this.state.pageLoading ? (
+      //     <View style={styles.loaderView}>
+      //       <ActivityIndicator size="large" height="100%" />
+      //     </View>
+      //   ) : (
+      //     <AppContainer />
+      //   )}
+      //   {/* <TutorDetails /> */}
+      // </Provider>
     );
   }
 }
