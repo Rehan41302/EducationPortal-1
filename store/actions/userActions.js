@@ -1,4 +1,5 @@
 import { SIGNIN_SUCCESS, SIGNOUT_SUCCESS, ADD_USER_DETAILS } from "./types";
+import firebase from "../../config/fire";
 
 export const signInAction = user => {
   return {
@@ -18,4 +19,15 @@ export const addUserDetailsAction = data => {
     type: ADD_USER_DETAILS,
     payload: data
   };
+};
+
+export const signOutUser = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then()
+    .catch(error => {
+      console.error(error.message);
+      alert(error.message);
+    });
 };

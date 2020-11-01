@@ -1,6 +1,26 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground } from 'react-native';
+import { Text, View, Alert,StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground } from 'react-native';
 export default class StudentLogin extends React.Component {
+  state = {
+    email: "",
+    password: ""
+  };
+  static navigationOptions = {
+    title: "Login"
+  };
+  userSignin(email, pass) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, pass)
+      .then(() => {
+        console.log("THEN");
+        this.props.navigation.replace("Student Profile");
+      })
+      .catch(error => {
+        console.log("Catch", error);
+        Alert.alert(error.message);
+      });
+  }
   render() {
     return (
       <ScrollView>
@@ -18,14 +38,17 @@ export default class StudentLogin extends React.Component {
               placeholder="Email"
               placeholderTextColor = "#ffffff"
               selectionColor="#fff"
-              keyboardType="email-address"/>
+              keyboardType="email-address"
+              value={this.state.email}
+              onChangeText={text => this.setState({ email: text })}/>
        
        <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Password"
               secureTextEntry={true}
               placeholderTextColor = "#ffffff"
-              
+              value={this.state.password}
+              onChangeText={text => this.setState({ password: text })}              
               /> 
 
                  <TouchableOpacity style={styles.button}>
@@ -34,7 +57,7 @@ export default class StudentLogin extends React.Component {
        
        <Text style={{textAlign:'center'}}>Don't have any account? </Text>
       
-       <TouchableOpacity  onPress={() => this.props.navigation.navigate('studentsignup')}>
+       <TouchableOpacity  onPress={() => this.props.navigation.navigate('Student Signup')}>
        <Text style={styles.touchtext}>SignUp</Text>
       
      </TouchableOpacity>

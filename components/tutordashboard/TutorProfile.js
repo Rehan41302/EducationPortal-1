@@ -17,7 +17,7 @@ class TutorProfile extends React.Component {
     const { user } = this.props;
     console.log({ object: this.props });
     if (!this.props.user?.name) {
-      this.props.navigation.replace("tutordetails");
+      this.props.navigation.replace("Tutor Details");
     }
     return (
       <ScrollView>
@@ -54,14 +54,14 @@ class TutorProfile extends React.Component {
                 <Text style={styles.noStdYet}>No Student Enrolled yet.</Text>
               )}
             </View>
-            <View>
+            {/* <View>
               <Button
                 onPress={() => this.props.navigation.push("onlineclass")}
                 // title={!this.state.loading ? "Submit" : <ActivityIndicator />}
                 title="Schedule Online Class"
                 color="#2196F3"
               />
-            </View>
+            </View> */}
           </>
         )}
       </ScrollView>

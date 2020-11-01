@@ -85,7 +85,7 @@ class TutorDetails extends React.Component {
           setTimeout(() => {
             this.clearInputs();
             this.setState({ loading: false });
-            this.props.navigation.replace("tutorprofile");
+            this.props.navigation.replace("Tutor Profile");
           }, 100);
         })
         .catch(error => {
@@ -97,6 +97,12 @@ class TutorDetails extends React.Component {
   };
 
   render() {
+    if (this.props.user?.name) {
+      this.props.navigation.replace("Tutor Account", {
+        screen: "Tutor Profile"
+      });
+    }
+
     const {
       name,
       contactNumber,

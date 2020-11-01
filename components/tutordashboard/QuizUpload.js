@@ -9,12 +9,20 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
-  Alert
+  Alert,
+  FlatList,
+  Web,
+  SafeAreaView
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import { connect } from "react-redux";
+import { firestore } from "firebase";
+import * as FileSystem from "expo-file-system";
+import { WebView } from "react-native-webview";
 
-export default class QuizUpload extends React.Component {
+
+class QuizUpload extends React.Component {
   state = {
     fullPath: "",
     downloadURL: "",
@@ -38,19 +46,6 @@ export default class QuizUpload extends React.Component {
         let ref = storageRef.child(`/quiz/${getTime}-${res.name}`);
         let fullPath = ref.fullPath;
         let uploadTask = ref.putString(res.uri, "data_url");
-        // .then(async snapshot => {
-        //   let downLink = await ref.getDownloadURL();
-        //   console.log("Uploaded a data_url string!", downLink);
-        //   that.setState({
-        //     // downloadURL: ref.getDownloadURL(),
-        //     fullPath
-        //   });
-        // })
-        // .catch(err => {
-        //   console.error(err.message);
-        //   Alert.alert(err.message);
-        // });
-
         // New Addintion
         uploadTask.on(
           "state_changed",
@@ -71,55 +66,121 @@ export default class QuizUpload extends React.Component {
           },
           function() {
             // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            let prevQuiz = that.props?.user?.quiz || [];
             uploadTask.snapshot.ref
               .getDownloadURL()
               .then(function(downloadURL) {
-                console.log("File available at", downloadURL);
-                that.setState({
-                  downloadURL,
-                  fullPath
+                prevQuiz.push({
+                  uploadTime: firestore.Timestamp.now(),
+                  pdfLink: downloadURL,
+                  storageAddress: fullPath
                 });
+                const db = firebase.firestore();
+                db.collection("tutors")
+                  .doc(that.props.user?.id)
+                  .set({
+                    ...that.props.user,
+                    quiz: prevQuiz
+                  })
+                  .then(() => {
+                    that.setState({
+                      uploading: false,
+                      downloadURL,
+                      fullPath
+                    });
+                  })
+                  .catch(error => {
+                    console.error(error);
+                    Alert.alert(error.message);
+                  });
+              })
+              .catch(error => {
+                console.error(error);
+                Alert.alert(error.message);
               });
           }
         );
       }
-      // console.log("File Name : " + res.name);
-      // console.log("File Size : " + res.size);
-      //Setting the state to show single file attributes
-      // setSingleFile(res);
     } catch (err) {
       alert("Unknown Error: " + JSON.stringify(err));
       throw err;
     }
   };
 
+  renderItem = ({ item, index }) => {
+    let createDate = new Date(item.uploadTime.seconds * 1000);
+
+    return (
+      <Card style={styles.card}>
+        <Card.Content>
+          <Title>Quiz {index + 1} </Title>
+          <Paragraph>
+            Uploaded: {createDate.toLocaleTimeString()},{" "}
+            {createDate.toDateString()}{" "}
+          </Paragraph>
+          {/* <Paragraph>Time & Date</Paragraph> */}
+        </Card.Content>
+        {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
+        <Card.Actions>
+          <Button onPress={this.downloadPDF}>DOWNLOAD</Button>
+        </Card.Actions>
+      </Card>
+    );
+  };
+
+  downloadPDF = link => {
+    FileSystem.downloadAsync(
+      "http://techslides.com/demos/sample-videos/small.mp4",
+      FileSystem.documentDirectory + "small.mp4"
+    )
+      .then(({ uri }) => {
+        console.log("Finished downloading to ", uri);
+      })
+      .catch(error => {
+        console.error(error);
+        Alert.alert(error);
+      });
+  };
+
   render() {
+    let { user } = this.props;
+    console.log({ user });
     return (
       <View>
-        <Card>
-          <Card.Title />
-          <Card.Content>
-            <Title>Qiuz Uploads </Title>
-            <Paragraph>Time & Date</Paragraph>
-          </Card.Content>
-          <Card.Cover
-            source={{
-              uri:
-                "https://firebasestorage.googleapis.com/v0/b/educationporal.appspot.com/o/quiz%2F1604068768037-Lecture%203.pptx.pdf?alt=media&token=40d52f07-59b2-46ee-a45f-9428d412ed18"
-            }}
+        <Button
+          style={{ flex: 1, backgroundColor: "#4fc3f7" }}
+          onPress={this.pickDocumentPDF}
+          disabled={this.state.uploading}
+        >
+          {this.state.uploading
+            ? `Uploading ${this.state.progress}%`
+            : "Upload New"}
+        </Button>
+        {user?.quiz && (
+          // <SafeAreaView>
+          <FlatList
+            data={user.quiz}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.pdfLink}
           />
-          <Card.Actions>
-            <Button onPress={this.pickDocumentPDF}>
-              {this.state.uploading
-                ? `Uploading ${this.state.progress}%`
-                : "Upload"}
-            </Button>
-          </Card.Actions>
-        </Card>
-        <Text>{this.state.fullPath}</Text>
-        <Text>{this.state.downloadURL}</Text>
+          // {/* </SafeAreaView> */}
+        )}
       </View>
     );
   }
 }
+
+const mapStatetoProps = state => {
+  console.log({ state });
+  return {
+    user: state.authReducer.user,
+    isAuthenticated: state.authReducer.isAuthenticated
+  };
+};
+export default connect(mapStatetoProps)(QuizUpload);
+
+const styles = StyleSheet.create({
+  card: {
+    marginVertical: 10
+  }
+});
