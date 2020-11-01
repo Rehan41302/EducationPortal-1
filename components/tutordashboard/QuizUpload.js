@@ -12,15 +12,35 @@ import {
   Alert,
   FlatList,
   Web,
-  SafeAreaView
+  SafeAreaView,
+  Button
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import // { Avatar, Button, Card, Title, Paragraph }
+* as RNP from "react-native-paper";
 import { connect } from "react-redux";
 import { firestore } from "firebase";
 import * as FileSystem from "expo-file-system";
 import { WebView } from "react-native-webview";
 
+const PDFVIEW = () => {
+  let webView = undefined;
+  return (
+    <WebView
+      style={styles.webview}
+      source={{
+        uri:
+          "https://firebasestorage.googleapis.com/v0/b/educationporal.appspot.com/o/quiz%2F1604218587548-intro-lec01-converted.pdf?alt=media&token=5a1058b1-b0b2-42d9-9d05-0ce991053572"
+      }}
+      ref={ref => {
+        webView = ref;
+      }}
+      // onError={() => {
+      //   webView.reload();
+      // }}
+    />
+  );
+};
 
 class QuizUpload extends React.Component {
   state = {
@@ -111,20 +131,20 @@ class QuizUpload extends React.Component {
     let createDate = new Date(item.uploadTime.seconds * 1000);
 
     return (
-      <Card style={styles.card}>
-        <Card.Content>
-          <Title>Quiz {index + 1} </Title>
-          <Paragraph>
+      <RNP.Card style={styles.card}>
+        <RNP.Card.Content>
+          <RNP.Title>Quiz {index + 1} </RNP.Title>
+          <RNP.Paragraph>
             Uploaded: {createDate.toLocaleTimeString()},{" "}
             {createDate.toDateString()}{" "}
-          </Paragraph>
+          </RNP.Paragraph>
           {/* <Paragraph>Time & Date</Paragraph> */}
-        </Card.Content>
+        </RNP.Card.Content>
         {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
-        <Card.Actions>
-          <Button onPress={this.downloadPDF}>DOWNLOAD</Button>
-        </Card.Actions>
-      </Card>
+        <RNP.Card.Actions>
+          <RNP.Button onPress={this.downloadPDF}>DOWNLOAD</RNP.Button>
+        </RNP.Card.Actions>
+      </RNP.Card>
     );
   };
 
@@ -145,17 +165,32 @@ class QuizUpload extends React.Component {
   render() {
     let { user } = this.props;
     console.log({ user });
+    // if (user) {
+    //   return <PDFVIEW />;
+    // }
     return (
       <View>
-        <Button
-          style={{ flex: 1, backgroundColor: "#4fc3f7" }}
+        <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
+          <Button
+            title={
+              this.state.uploading
+                ? `Uploading ${this.state.progress}%`
+                : "Upload New"
+            }
+            onPress={this.pickDocumentPDF}
+            style={styles.uploadBtn}
+          />
+        </View>
+        {/* <TouchableOpacity
+          style={styles.uploadBtn}
           onPress={this.pickDocumentPDF}
-          disabled={this.state.uploading}
         >
-          {this.state.uploading
-            ? `Uploading ${this.state.progress}%`
-            : "Upload New"}
-        </Button>
+          <Text style={styles.btnText}>
+            {this.state.uploading
+              ? `Uploading ${this.state.progress}%`
+              : "Upload New"}
+          </Text>
+        </TouchableOpacity> */}
         {user?.quiz && (
           // <SafeAreaView>
           <FlatList
@@ -182,5 +217,22 @@ export default connect(mapStatetoProps)(QuizUpload);
 const styles = StyleSheet.create({
   card: {
     marginVertical: 10
+  },
+  webview: {
+    backgroundColor: "yellow",
+    height: 320,
+    width: 200
+  },
+  uploadBtn: {
+    marginTop: 10,
+    flex: 1,
+    paddingVertical: 10,
+    backgroundColor: "#4fc3f7",
+    alignContent: "center"
+  },
+  btnText: {
+    color: "#ffffff",
+    textAlign: "center"
+    // fontWeight: 500
   }
 });
