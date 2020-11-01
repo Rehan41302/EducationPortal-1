@@ -16,6 +16,7 @@ export default class  StudentSignup extends React.Component{
   state = {
     email: "",
     password: "",
+    confirmPassword:'',
     loading: false
   };
   static navigationOption = {
@@ -23,6 +24,11 @@ export default class  StudentSignup extends React.Component{
   };
   userSignup(email, pass) {
     console.log(this.state);
+    const{password,confirmPassword}=this.state
+    if(password !== confirmPassword){
+      Alert.alert("confirm password is wrong")
+      return
+    }
     this.setState({ loading: true });
     firebase
       .auth()
@@ -35,10 +41,12 @@ export default class  StudentSignup extends React.Component{
           .doc(res.user.uid)
           .set({
             id: res.user.uid,
-            role: "student"
+            role: "student",
+            register: false
+
           })
           .then(() => {
-            this.props.navigation.replace("Student Details");
+            this.props.navigation.replace("Student Account");
           })
           // this.props.navigation.replace("tutorlogin");
           .catch(error => Alert.alert(error.message));
@@ -78,7 +86,8 @@ render(){
               placeholder="Confirm Password"
               secureTextEntry={true}
               placeholderTextColor = "#ffffff"
-              
+              value={this.state.confirmPassword}
+              onChangeText={text => this.setState({ confirmPassword: text })}  
               /> 
                 
                 <TouchableOpacity

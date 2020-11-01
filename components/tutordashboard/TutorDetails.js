@@ -85,7 +85,7 @@ class TutorDetails extends React.Component {
           setTimeout(() => {
             this.clearInputs();
             this.setState({ loading: false });
-            this.props.navigation.replace("tutorprofile");
+            this.props.navigation.replace("Tutor Profile");
           }, 100);
         })
         .catch(error => {

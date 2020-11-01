@@ -18,6 +18,7 @@ import Quiz from "./components/quiz";
 import TutorRegister from "./components/TutorRegister";
 import StudentLogin from "./components/StudentLogin";
 import StudentRegister from "./components/StudentRegister";
+import StudentQuiz from "./components/studentQuiz";
 import TutorProfile from "./components/tutordashboard/TutorProfile";
 import TutorDetails from "./components/tutordashboard/TutorDetails";
 import StudentProfile from "./components/studentdashboard/StudentProfile";
@@ -87,18 +88,31 @@ const TutorAccountStack = () => {
   )
 }
 
-const StudentAccountStack = () => {
+const StudentAccountStack = (user) => {
   return (
       <StudentTabs.Navigator>
-          <StudentTabs.Screen name='Student Details'  component={StudentRegister} />
+          <StudentTabs.Screen name='Student Details' user={user}  component={StudentRegister} />
           {/* <StudentTabs.Screen name='Sell' options={{
               // tabBarButton: () => SellBtn
           }}  component={StudentLogin} /> */}
-          <StudentTabs.Screen name='Student Profile'  component={StudentProfile} />
+          {/* <StudentTabs.Screen name='Student Profile'  component={StudentProfile} /> */}
       </StudentTabs.Navigator>
   )
 }
 
+const RegisteredStudent = (user) => {
+  return (
+      <StudentTabs.Navigator>
+          {/* <StudentTabs.Screen name='Student Details' user={user}  component={StudentRegister} /> */}
+          {/* <StudentTabs.Screen name='Sell' options={{
+              // tabBarButton: () => SellBtn
+          }}  component={StudentLogin} /> */}
+          <StudentTabs.Screen name='Student Profile'  component={StudentProfile} />
+          <StudentTabs.Screen name='Student Quiz'  component={StudentQuiz} />
+          <StudentTabs.Screen name='Student Class'  component={StudentProfile} />
+      </StudentTabs.Navigator>
+  )
+}
 const auth = () => {
   return (
       <Tabs.Navigator>
@@ -143,11 +157,12 @@ class App extends React.Component {
                         signInAction({
                           ...doc.data(),
                           id: user.uid,
-                          role: userDoc.data().role
+                          role: userDoc.data().role,
+                          isRegister: userDoc.data().register
                         })
                       );
                       this.setState({
-                        user: { ...doc.data(), role: userDoc.data().role },
+                        user: { ...doc.data(), role: userDoc.data().role,isRegister:userDoc.data().register },
                         isAuthenticated: true,
                         pageLoading: false
                       });
@@ -155,11 +170,12 @@ class App extends React.Component {
                       store.dispatch(
                         signInAction({
                           id: user.uid,
-                          role: userDoc.data().role
+                          role: userDoc.data().role,
+                          isRegister: userDoc.data().register
                         })
                       );
                       this.setState({
-                        user: { id: user.uid, role: userDoc.data().role },
+                        user: { id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register },
                         isAuthenticated: true,
                         pageLoading: false
                       });
@@ -168,10 +184,10 @@ class App extends React.Component {
                   .catch(error => {
                     Alert.alert(error.message);
                     store.dispatch(
-                      signInAction({ id: user.uid, role: userDoc.data().role })
+                      signInAction({ id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register })
                     );
                     this.setState({
-                      user: { id: user.uid, role: userDoc.data().role },
+                      user: { id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register },
                       isAuthenticated: true,
                       pageLoading: false
                     });
@@ -180,10 +196,10 @@ class App extends React.Component {
             } else {
               Alert.alert("USER DATA NOT EXISTS!");
               store.dispatch(
-                signInAction({ id: user.uid, role: userDoc.data().role })
+                signInAction({ id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register })
               );
               this.setState({
-                user: { id: user.uid, role: userDoc.data().role },
+                user: { id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register },
                 isAuthenticated: true,
                 pageLoading: false
               });
@@ -208,7 +224,7 @@ class App extends React.Component {
     });
   }
   render() {
-    console.log(this.state.user)
+    console.log(this.state.user,this.props.navigation)
     return (
       // <QuizUpload />
       // <Quiz />
@@ -228,10 +244,13 @@ class App extends React.Component {
               <RootStack.Screen name='Tutor Account' options={{
                    headerShown:false
               }} component={TutorAccountStack} />:
-              this.state.user?.role == 'student' ?
+              this.state.user?.role == 'student' && this.state.user?.isRegister == false ?
               <RootStack.Screen name='Student Account' options={{
                 headerShown:false
-           }} component={StudentAccountStack} /> : void 0}  
+           }} component={StudentRegister} /> : 
+           <RootStack.Screen name='Student Registered' options={{
+            headerShown:false
+       }} component={RegisteredStudent} />}  
           </RootStack.Navigator>
         </NavigationContainer>
         )}

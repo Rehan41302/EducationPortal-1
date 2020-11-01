@@ -36,7 +36,8 @@ export default class TutorSignUp extends React.Component {
           .doc(res.user.uid)
           .set({
             id: res.user.uid,
-            role: "tutor"
+            role: "tutor",
+            register: false
           })
           .then(() => {
             this.props.navigation.replace("Tutor Details");
