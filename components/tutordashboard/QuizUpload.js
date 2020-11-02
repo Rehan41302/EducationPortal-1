@@ -1,46 +1,17 @@
 import React from "react";
 import firebase from "../../config/fire";
 import {
-  Text,
   View,
   StyleSheet,
-  Image,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
   Alert,
   FlatList,
-  Web,
-  SafeAreaView,
-  Button
+  Button,
+  Linking
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import // { Avatar, Button, Card, Title, Paragraph }
-* as RNP from "react-native-paper";
+import * as RNP from "react-native-paper";
 import { connect } from "react-redux";
 import { firestore } from "firebase";
-import * as FileSystem from "expo-file-system";
-import { WebView } from "react-native-webview";
-
-const PDFVIEW = () => {
-  let webView = undefined;
-  return (
-    <WebView
-      style={styles.webview}
-      source={{
-        uri:
-          "https://firebasestorage.googleapis.com/v0/b/educationporal.appspot.com/o/quiz%2F1604218587548-intro-lec01-converted.pdf?alt=media&token=5a1058b1-b0b2-42d9-9d05-0ce991053572"
-      }}
-      ref={ref => {
-        webView = ref;
-      }}
-      // onError={() => {
-      //   webView.reload();
-      // }}
-    />
-  );
-};
 
 class QuizUpload extends React.Component {
   state = {
@@ -142,32 +113,17 @@ class QuizUpload extends React.Component {
         </RNP.Card.Content>
         {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
         <RNP.Card.Actions>
-          <RNP.Button onPress={this.downloadPDF}>DOWNLOAD</RNP.Button>
+          <RNP.Button onPress={() => Linking.openURL(link)}>
+            DOWNLOAD
+          </RNP.Button>
         </RNP.Card.Actions>
       </RNP.Card>
     );
   };
 
-  downloadPDF = link => {
-    FileSystem.downloadAsync(
-      "http://techslides.com/demos/sample-videos/small.mp4",
-      FileSystem.documentDirectory + "small.mp4"
-    )
-      .then(({ uri }) => {
-        console.log("Finished downloading to ", uri);
-      })
-      .catch(error => {
-        console.error(error);
-        Alert.alert(error);
-      });
-  };
-
   render() {
     let { user } = this.props;
-    console.log({ user });
-    // if (user) {
-    //   return <PDFVIEW />;
-    // }
+    // console.log({ user });
     return (
       <View>
         <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
@@ -181,16 +137,6 @@ class QuizUpload extends React.Component {
             style={styles.uploadBtn}
           />
         </View>
-        {/* <TouchableOpacity
-          style={styles.uploadBtn}
-          onPress={this.pickDocumentPDF}
-        >
-          <Text style={styles.btnText}>
-            {this.state.uploading
-              ? `Uploading ${this.state.progress}%`
-              : "Upload New"}
-          </Text>
-        </TouchableOpacity> */}
         {user?.quiz && (
           // <SafeAreaView>
           <FlatList
