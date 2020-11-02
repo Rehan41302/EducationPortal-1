@@ -10,13 +10,16 @@ import {
   ImageBackground,
   Button,
   ActivityIndicator,
-  Alert
+  Alert,
+  Linking
 } from "react-native";
 // import { Button } from "native-base";
 import firebase from "../../config/fire";
 import { firestore } from "firebase";
 import { UrlIsValid } from "../../service/validations";
 import { connect } from "react-redux";
+import // { Avatar, Button, Card, Title, Paragraph }
+* as RNP from "react-native-paper";
 
 class OnlineClass extends React.Component {
   state = {
@@ -176,17 +179,17 @@ class OnlineClass extends React.Component {
 
         <View>
           {user?.class && 
-          <Card style={styles.card}>
-            <Card.Content>
-              <Title>Online Class</Title>
-              <Paragraph>Uploaded: {new Date(user.class.uploadTime.seconds * 1000)}</Paragraph>
-              <Paragraph>Timing: {user.class.timing}</Paragraph>
+          <RNP.Card>
+            <RNP.Card.Content>
+              <RNP.Title>Online Class</RNP.Title>
+              <RNP.Paragraph>Uploaded: {new Date(user.class.uploadTime.seconds * 1000).toDateString()}, {new Date(user.class.uploadTime.seconds * 1000).toLocaleTimeString()}</RNP.Paragraph>
+              <RNP.Paragraph>Timing: {user.class.timing}</RNP.Paragraph>
               {/* <Paragraph>Time & Date</Paragraph> */}
-            </Card.Content>
-            {/* <Card.Actions>
-              <Button>JOIN</Button>
-            </Card.Actions> */}
-          </Card>
+            </RNP.Card.Content>
+            <RNP.Card.Actions>
+              <Button title="Join" onPress={() =>Linking.openURL(user.class.zoomLink)}>JOIN</Button>
+            </RNP.Card.Actions>
+          </RNP.Card>
           }
         </View>
       </ScrollView>
