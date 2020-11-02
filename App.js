@@ -267,7 +267,12 @@ class App extends React.Component {
       <Provider store={store}>
         {this.state.pageLoading ? (
           <View style={styles.loaderView}>
-            <ActivityIndicator size="large" height="100%" />
+            <ActivityIndicator
+              size="large"
+              height="100%"
+              animating={true}
+              color="#0000ff"
+            />
           </View>
         ) : (
           <NavigationContainer> 
@@ -309,7 +314,9 @@ class App extends React.Component {
 const styles = StyleSheet.create({
   loaderView: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    alignItems: "center"
+    // flexDirection: "row"
   }
 });
 
