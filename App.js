@@ -13,80 +13,110 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 
 // You can import from local files
+// import Quiz from "./components/quiz";
+// import TutorRegister from "./components/TutorRegister";
 import TutorLogin from "./components/TutorLogin";
-import Quiz from "./components/quiz";
-import TutorRegister from "./components/TutorRegister";
+import AvailableTutors from "./components/availableTutors";
 import StudentLogin from "./components/StudentLogin";
 import StudentRegister from "./components/StudentRegister";
 import StudentQuiz from "./components/studentQuiz";
+import StudentOnlineClass from "./components/studentClass";
 import TutorProfile from "./components/tutordashboard/TutorProfile";
 import TutorDetails from "./components/tutordashboard/TutorDetails";
 import StudentProfile from "./components/studentdashboard/StudentProfile";
 import QuizUpload from "./components/tutordashboard/QuizUpload";
 import OnlineClass from "./components/tutordashboard/OnlineClass";
+import SignOut from "./components/Signout";
 import StudentClass from "./components/studentdashboard/StudentClass";
 import QuizAttempt from "./components/studentdashboard/QuizAttempt";
 
 // or any pure javascript modules available in npm
-import { Card } from "react-native-paper";
-// import { createAppContainer, withNavigation } from "react-navigation";
-// import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from '@react-navigation/stack'
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import TutorSignUp from "./components/TutorSignup";
 import StudentSignUp from "./components/StudentSignup";
 import { signInAction } from "./store/actions/userActions";
 
 const TutorTabs = createBottomTabNavigator();
 const Tabs = createBottomTabNavigator();
+const TopTabs = createMaterialTopTabNavigator();
 const StudentTabs = createBottomTabNavigator();
-const RootStack = createStackNavigator()
-const TutorAuthStackScreen = createStackNavigator()
-const StudentAuthStackScreen = createStackNavigator()
+const RootStack = createStackNavigator();
+const TutorAuthStackScreen = createStackNavigator();
+const StudentAuthStackScreen = createStackNavigator();
+
+const TopTabsStack = () => {
+  return (
+    <TopTabs.Navigator>
+      <TopTabs.Screen name='Tutors' component={AvailableTutors}  />
+      <TopTabs.Screen name='Quiz' component={StudentQuiz}  />
+      <TopTabs.Screen name='Online Class' component={StudentOnlineClass}  />
+    </TopTabs.Navigator>
+  )
+}
 
 const TutorAuthStack = () => {
   return (
     <TutorAuthStackScreen.Navigator>
-      <TutorAuthStackScreen.Screen name='Tutor login' options={{
-          headerShown:false
-      }} component={TutorLogin} />
-      <TutorAuthStackScreen.Screen name='Tutor Signup' options={{
-          headerShown:false
-      }} component={TutorSignUp} />
+      <TutorAuthStackScreen.Screen
+        name="Tutor login"
+        options={{
+          headerShown: false
+        }}
+        component={TutorLogin}
+      />
+      <TutorAuthStackScreen.Screen
+        name="Tutor Signup"
+        options={{
+          headerShown: false
+        }}
+        component={TutorSignUp}
+      />
       {/* <TutorAuthStackScreen.Screen name='Detail' component={Detail} 
       options={({route}) => ({title:route.params.title})} /> */}
-  </TutorAuthStackScreen.Navigator>
-  )
-}
+    </TutorAuthStackScreen.Navigator>
+  );
+};
 
 const StudentAuthStack = () => {
   return (
     <StudentAuthStackScreen.Navigator>
-      <StudentAuthStackScreen.Screen name='Student login' options={{
-          headerShown:false
-      }} component={StudentLogin} />
-      <StudentAuthStackScreen.Screen name='Student Signup' options={{
-          headerShown:false
-      }} component={StudentSignUp} />
+      <StudentAuthStackScreen.Screen
+        name="Student login"
+        options={{
+          headerShown: false
+        }}
+        component={StudentLogin}
+      />
+      <StudentAuthStackScreen.Screen
+        name="Student Signup"
+        options={{
+          headerShown: false
+        }}
+        component={StudentSignUp}
+      />
       {/* <StudentAuthStackScreen.Screen name='Detail' component={Detail} 
       options={({route}) => ({title:route.params.title})} /> */}
-  </StudentAuthStackScreen.Navigator>
-  )
-}
+    </StudentAuthStackScreen.Navigator>
+  );
+};
 
 const TutorAccountStack = () => {
   return (
-      <TutorTabs.Navigator>
-          <TutorTabs.Screen name='Tutor Details'  component={TutorDetails} />
-          {/* <TutorTabs.Screen name='Sell' options={{
+    <TutorTabs.Navigator>
+      <TutorTabs.Screen name="Tutor Profile" component={TutorProfile} />
+      <TutorTabs.Screen name="Online Class" component={OnlineClass} />
+      <TutorTabs.Screen name="Quiz Upload" component={QuizUpload} />
+      <TutorTabs.Screen name="Sign Out" component={SignOut} />
+      {/* <TutorTabs.Screen name="Tutor Details" component={TutorDetails} /> */}
+      {/* <TutorTabs.Screen name='Sell' options={{
               // tabBarButton: () => SellBtn
           }}  component={StudentLogin} /> */}
-          <TutorTabs.Screen name='Tutor Profile'  component={TutorProfile} />
-      </TutorTabs.Navigator>
-  )
-}
+    </TutorTabs.Navigator>
+  );
+};
 
 const StudentAccountStack = (user) => {
   return (
@@ -100,7 +130,7 @@ const StudentAccountStack = (user) => {
   )
 }
 
-const RegisteredStudent = (user) => {
+const RegisteredStudentStack = (user) => {
   return (
       <StudentTabs.Navigator>
           {/* <StudentTabs.Screen name='Student Details' user={user}  component={StudentRegister} /> */}
@@ -108,24 +138,26 @@ const RegisteredStudent = (user) => {
               // tabBarButton: () => SellBtn
           }}  component={StudentLogin} /> */}
           <StudentTabs.Screen name='Student Profile'  component={StudentProfile} />
-          <StudentTabs.Screen name='Student Quiz'  component={StudentQuiz} />
-          <StudentTabs.Screen name='Student Class'  component={StudentProfile} />
+          <StudentTabs.Screen name='Study Materials'  component={TopTabsStack} />
+          {/* <StudentTabs.Screen name='Student Class'  component={StudentProfile} /> */}
+          <TutorTabs.Screen name="Sign Out" component={SignOut} />
+
       </StudentTabs.Navigator>
   )
 }
 const auth = () => {
   return (
-      <Tabs.Navigator>
-          {/* <Tabs.Screen name='Explore'  component={StudentRegister} /> */}
-          <Tabs.Screen name='Tutor Login'  component={TutorAuthStack} />
-          {/* <Tabs.Screen name='Sell' options={{
+    <Tabs.Navigator>
+      {/* <Tabs.Screen name='Explore'  component={StudentRegister} /> */}
+      <Tabs.Screen name="Tutor Login" component={TutorAuthStack} />
+      {/* <Tabs.Screen name='Sell' options={{
               // tabBarButton: () => SellBtn
           }}  component={StudentLogin} /> */}
-          <Tabs.Screen name='Student Login'  component={StudentAuthStack} />
-          {/* <Tabs.Screen name='Account'  component={TutorRegister} /> */}
-      </Tabs.Navigator>
-  )
-}
+      <Tabs.Screen name="Student Login" component={StudentAuthStack} />
+      {/* <Tabs.Screen name='Account'  component={TutorRegister} /> */}
+    </Tabs.Navigator>
+  );
+};
 class App extends React.Component {
   state = {
     user: undefined,
@@ -150,23 +182,37 @@ class App extends React.Component {
                   userDoc.data().role === "tutor" ? "tutors" : "students";
                 db.collection(collection)
                   .doc(user.uid)
-                  .get()
-                  .then(doc => {
-                    if (doc.exists) {
-                      store.dispatch(
-                        signInAction({
-                          ...doc.data(),
-                          id: user.uid,
-                          role: userDoc.data().role,
-                          isRegister: userDoc.data().register
-                        })
-                      );
-                      this.setState({
-                        user: { ...doc.data(), role: userDoc.data().role,isRegister:userDoc.data().register },
-                        isAuthenticated: true,
-                        pageLoading: false
-                      });
-                    } else {
+                  .onSnapshot(
+                    doc => {
+                      if (doc.exists) {
+                        store.dispatch(
+                          signInAction({
+                            ...doc.data(),
+                            id: user.uid,
+                            role: userDoc.data().role
+                          })
+                        );
+                        this.setState({
+                          user: { ...doc.data(), role: userDoc.data().role },
+                          isAuthenticated: true,
+                          pageLoading: false
+                        });
+                      } else {
+                        store.dispatch(
+                          signInAction({
+                            id: user.uid,
+                            role: userDoc.data().role
+                          })
+                        );
+                        this.setState({
+                          user: { id: user.uid, role: userDoc.data().role },
+                          isAuthenticated: true,
+                          pageLoading: false
+                        });
+                      }
+                    },
+                    error => {
+                      Alert.alert(error.message);
                       store.dispatch(
                         signInAction({
                           id: user.uid,
@@ -180,18 +226,7 @@ class App extends React.Component {
                         pageLoading: false
                       });
                     }
-                  })
-                  .catch(error => {
-                    Alert.alert(error.message);
-                    store.dispatch(
-                      signInAction({ id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register })
-                    );
-                    this.setState({
-                      user: { id: user.uid, role: userDoc.data().role,isRegister: userDoc.data().register },
-                      isAuthenticated: true,
-                      pageLoading: false
-                    });
-                  });
+                  );
               }
             } else {
               Alert.alert("USER DATA NOT EXISTS!");
@@ -212,19 +247,20 @@ class App extends React.Component {
               .signOut()
               .then(res => {
                 this.setState({ pageLoading: false });
-                this.props.navigation.replace("tutorlogin");
+                // this.props.navigation.replace("Tutor Login");
               });
             Alert.alert(error.message);
           });
       } else {
         // this.props.navigation.replace("tutorlogin");
         console.log("SIGNED OUT");
-        this.setState({ pageLoading: false,user:false });
+        this.setState({ pageLoading: false, user: false });
       }
     });
   }
   render() {
     console.log(this.state.user,this.props.navigation)
+    console.log(this.state.user);
     return (
       // <QuizUpload />
       // <Quiz />
@@ -240,17 +276,27 @@ class App extends React.Component {
               <RootStack.Screen name='Auth' options={{
                 headerShown:false
             }} component={auth} />  :
-            this.state.user?.role == 'tutor' ?
+            this.state.user?.role == 'tutor' && this.state.user?.name ?
               <RootStack.Screen name='Tutor Account' options={{
                    headerShown:false
-              }} component={TutorAccountStack} />:
+              }} component={TutorAccountStack} /> : this.state.user?.role == "tutor" && !this.state.user?.name ? (
+                <RootStack.Screen
+                  name="Tutor Details"
+                  options={
+                    {
+                      // headerShown: false
+                    }
+                  }
+                  component={TutorDetails}
+                />
+              ) : 
               this.state.user?.role == 'student' && this.state.user?.isRegister == false ?
               <RootStack.Screen name='Student Account' options={{
-                headerShown:false
+                // headerShown:false
            }} component={StudentRegister} /> : 
            <RootStack.Screen name='Student Registered' options={{
             headerShown:false
-       }} component={RegisteredStudent} />}  
+       }} component={RegisteredStudentStack} />}  
           </RootStack.Navigator>
         </NavigationContainer>
         )}

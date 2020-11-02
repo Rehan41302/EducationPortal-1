@@ -97,6 +97,12 @@ class TutorDetails extends React.Component {
   };
 
   render() {
+    if (this.props.user?.name) {
+      this.props.navigation.replace("Tutor Account", {
+        screen: "Tutor Profile"
+      });
+    }
+
     const {
       name,
       contactNumber,

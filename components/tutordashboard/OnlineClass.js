@@ -16,8 +16,9 @@ import {
 import firebase from "../../config/fire";
 import { firestore } from "firebase";
 import { UrlIsValid } from "../../service/validations";
+import { connect } from "react-redux";
 
-export default class OnlineClass extends React.Component {
+class OnlineClass extends React.Component {
   state = {
     className: "",
     course: "",
@@ -64,12 +65,16 @@ export default class OnlineClass extends React.Component {
     if (this.isValid()) {
       this.setState({ loading: true });
       const db = firebase.firestore();
-      db.collection("onlineclasses")
-        .add({
-          // course,
-          timing,
-          zoomLink,
-          uploadTime: firestore.Timestamp.now()
+      let that = this;
+      db.collection("tutors")
+        .doc(this.props.user.id)
+        .set({
+          ...that.props.user,
+          class: {
+            timing,
+            zoomLink,
+            uploadTime: firestore.Timestamp.now()
+          }
         })
         .then(res => {
           this.setState({ loading: false });
@@ -87,7 +92,8 @@ export default class OnlineClass extends React.Component {
 
   render() {
     const { course, timing, zoomLink, loading, errors } = this.state;
-    console.log({ props: this.props });
+    // console.log({ props: this.props });
+    let { user } = this.props;
     let btnDisabled = timing && zoomLink && !loading ? false : true;
     return (
       <ScrollView style={styles.container}>
@@ -167,10 +173,34 @@ export default class OnlineClass extends React.Component {
             disabled={btnDisabled}
           />
         </View>
+
+        <View>
+          {user?.class && 
+          <Card style={styles.card}>
+            <Card.Content>
+              <Title>Online Class</Title>
+              <Paragraph>Uploaded: {new Date(user.class.uploadTime.seconds * 1000)}</Paragraph>
+              <Paragraph>Timing: {user.class.timing}</Paragraph>
+              {/* <Paragraph>Time & Date</Paragraph> */}
+            </Card.Content>
+            {/* <Card.Actions>
+              <Button>JOIN</Button>
+            </Card.Actions> */}
+          </Card>
+          }
+        </View>
       </ScrollView>
     );
   }
 }
+const mapStatetoProps = state => {
+  console.log({ state });
+  return {
+    user: state.authReducer.user,
+    isAuthenticated: state.authReducer.isAuthenticated
+  };
+};
+export default connect(mapStatetoProps)(OnlineClass);
 
 const styles = StyleSheet.create({
   container: {

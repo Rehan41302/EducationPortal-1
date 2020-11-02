@@ -1,30 +1,49 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground } from 'react-native';
+import {connect} from 'react-redux'
+import { Avatar, Button, Card, Title, Paragraph,} from "react-native-paper";
 
-export default class StudentProfile extends React.Component{
+ class StudentProfile extends React.Component{
   render(){
+    console.log(this.props.user)
+    const {contactNumber,name,level,subject}= this.props.user
    return(
      <ScrollView>
-     <View style={styles.container}>
      <Text style={styles.htext}>Student Profile Details</Text>
 
-     <Text >student name:</Text>
-     <Text >interested for the subject :</Text>
-     <Text >your class level :</Text>
-     <Text >your contact number :</Text>
-
-     <Text  style={styles.student} >Tutor will be teaching</Text>
-     <Text >Tutor name:</Text>
-     <Text >Tutor interested for the subject:</Text>
-     <Text >Tutor teaching experience:</Text>
-     
-     </View>
+         <Card style={styles.card}>
+        <Card.Content>
+          <Title>student name: {name}</Title>
+          <Title>Intrested Subject : {subject} </Title>
+          <Title>Student Level : {level} </Title>
+          <Title>Contact number : {contactNumber} </Title>          
+          {/* <Paragraph>Time & Date</Paragraph> */}
+        </Card.Content>
+        {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
+        {/* <Card.Actions>
+          {item?.quiz&&
+          <Button onPress={
+             ()=>this.enroll(item)}>Upload </Button>
+          }
+        </Card.Actions> */}
+      </Card>
+   
+    
      </ScrollView>
    )
 
   }
 }
 
+
+const mapStatetoProps = state => {
+  console.log({ state });
+  return {
+    user: state.authReducer.user,
+    isAuthenticated: state.authReducer.isAuthenticated
+  };
+};
+export default connect(mapStatetoProps)(StudentProfile);
 
 const styles = StyleSheet.create({
 htext:{

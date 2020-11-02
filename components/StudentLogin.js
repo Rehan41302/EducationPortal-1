@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Text, View, Alert,StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground } from 'react-native';
+import * as firebase from "firebase";
 export default class StudentLogin extends React.Component {
   state = {
     email: "",
@@ -8,12 +9,14 @@ export default class StudentLogin extends React.Component {
   static navigationOptions = {
     title: "Login"
   };
-  userSignin(email, pass) {
+  userSignin=()=> {
+    const {email,password} = this.state
+    console.log(email,firebase.auth())
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, pass)
-      .then(() => {
-        console.log("THEN");
+      .signInWithEmailAndPassword(email, password)
+      .then((res) => {
+        console.log("THEN",res);
         this.props.navigation.replace("Student Profile");
       })
       .catch(error => {
@@ -21,6 +24,7 @@ export default class StudentLogin extends React.Component {
         Alert.alert(error.message);
       });
   }
+  
   render() {
     return (
       <ScrollView>
@@ -51,7 +55,7 @@ export default class StudentLogin extends React.Component {
               onChangeText={text => this.setState({ password: text })}              
               /> 
 
-                 <TouchableOpacity style={styles.button}>
+                 <TouchableOpacity style={styles.button} onPress={this.userSignin}>
              <Text style={styles.buttonText}>Login</Text>
            </TouchableOpacity> 
        
