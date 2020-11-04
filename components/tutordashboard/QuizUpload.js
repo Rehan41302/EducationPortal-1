@@ -113,7 +113,7 @@ class QuizUpload extends React.Component {
         </RNP.Card.Content>
         {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
         <RNP.Card.Actions>
-          <RNP.Button onPress={() => Linking.openURL(link)}>
+          <RNP.Button onPress={() => Linking.openURL(item?.pdfLink)}>
             DOWNLOAD
           </RNP.Button>
         </RNP.Card.Actions>

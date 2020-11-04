@@ -46,7 +46,7 @@ export default class  StudentSignup extends React.Component{
 
           })
           .then(() => {
-            this.props.navigation.replace("Student Account");
+            this.props.navigation.replace("Student Detail");
           })
           // this.props.navigation.replace("tutorlogin");
           .catch(error => Alert.alert(error.message));

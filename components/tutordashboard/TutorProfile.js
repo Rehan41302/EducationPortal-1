@@ -86,7 +86,7 @@ class TutorProfile extends React.Component {
                 <Text style={styles.value}> {user.experience}</Text>
               </View>
               <View style={styles.fieldSet}>
-                <Text style={styles.info}>Your Your contact number:</Text>
+                <Text style={styles.info}>Your  contact number:</Text>
                 <Text style={styles.value}> {user.contactNumber}</Text>
               </View>
 

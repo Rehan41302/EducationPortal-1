@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Text, View, Alert,StyleSheet, Image,ScrollView,TextInput,TouchableOpacity,ImageBackground } from 'react-native';
+import { connect } from "react-redux";
 import * as firebase from "firebase";
-export default class StudentLogin extends React.Component {
+ class StudentLogin extends React.Component {
   state = {
     email: "",
     password: ""
@@ -26,6 +27,8 @@ export default class StudentLogin extends React.Component {
   }
   
   render() {
+    if (this.props.isAuthenticated)
+    this.props.navigation.replace("Tutor Profile");
     return (
       <ScrollView>
       <ImageBackground   style={styles.container} source={require('../assets/image/tutorbackpic.jpg')}>
@@ -72,6 +75,15 @@ export default class StudentLogin extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log({ state });
+  return {
+    user: state.authReducer.user,
+    isAuthenticated: state.authReducer.isAuthenticated
+  };
+};
+export default connect(mapStateToProps)(StudentLogin);
 
 const styles = StyleSheet.create({
   container: {

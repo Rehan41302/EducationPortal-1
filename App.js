@@ -18,6 +18,7 @@ import store from "./store/store";
 import TutorLogin from "./components/TutorLogin";
 import AvailableTutors from "./components/availableTutors";
 import StudentLogin from "./components/StudentLogin";
+import TutorQuizView from "./components/tutorQuizView";
 import StudentRegister from "./components/StudentRegister";
 import StudentQuiz from "./components/studentQuiz";
 import StudentOnlineClass from "./components/studentClass";
@@ -39,7 +40,7 @@ import TutorSignUp from "./components/TutorSignup";
 import StudentSignUp from "./components/StudentSignup";
 import { signInAction } from "./store/actions/userActions";
 
-const TutorTabs = createBottomTabNavigator();
+const TutorTabs = createBottomTabNavigator()
 const Tabs = createBottomTabNavigator();
 const TopTabs = createMaterialTopTabNavigator();
 const StudentTabs = createBottomTabNavigator();
@@ -53,6 +54,16 @@ const TopTabsStack = () => {
       <TopTabs.Screen name='Tutors' component={AvailableTutors}  />
       <TopTabs.Screen name='Quiz' component={StudentQuiz}  />
       <TopTabs.Screen name='Online Class' component={StudentOnlineClass}  />
+    </TopTabs.Navigator>
+  )
+}
+
+const TutorQuizTopStack = () => {
+  return (
+    <TopTabs.Navigator>
+      <TopTabs.Screen name='Student Quiz' component={TutorQuizView}  />
+      <TutorTabs.Screen name="Quiz Upload" component={QuizUpload} />
+ 
     </TopTabs.Navigator>
   )
 }
@@ -108,7 +119,7 @@ const TutorAccountStack = () => {
     <TutorTabs.Navigator>
       <TutorTabs.Screen name="Tutor Profile" component={TutorProfile} />
       <TutorTabs.Screen name="Online Class" component={OnlineClass} />
-      <TutorTabs.Screen name="Quiz Upload" component={QuizUpload} />
+      <TutorTabs.Screen name="Quiz" component={TutorQuizTopStack} />
       <TutorTabs.Screen name="Sign Out" component={SignOut} />
       {/* <TutorTabs.Screen name="Tutor Details" component={TutorDetails} /> */}
       {/* <TutorTabs.Screen name='Sell' options={{
