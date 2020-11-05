@@ -3,9 +3,7 @@
     "name": "native",
     "slug": "native",
     "version": "1.0.0",
-    "platforms": [
-      "web"
-    ],
+    "platforms": ["web"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -16,18 +14,19 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymus.native",
+      "buildNumber": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "description": "",
     "android": {
-      "package": "com.ayyan.native"
+      "package": "com.anonymus.native",
+      "versionCode": 1
     }
   }
 }
