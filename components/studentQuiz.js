@@ -11,7 +11,8 @@ import { firestore } from "firebase";
 // import {FileSystem} from 'expo-file-system'
 class StudentQuiz extends React.Component{
  state={
-   uploading:false
+   uploading:false,
+   progress:0
  }
 
  componentDidMount() {
@@ -131,16 +132,20 @@ console.log(item)
               console.log(quiz.pdfLink)
               let co = 'https://nextjs.org/docs/deployment'
               return (
-                  <Text> {index+1} </Text>
+                  <Card.Actions>
+                                
+                    <Button onPress={()=> Linking.openURL(quiz.pdfLink) }> Download Quiz {index+1} </Button>            
+                </Card.Actions>
                 )
             })}
           {/* <Paragraph>Time & Date</Paragraph> */}
         </Card.Content>
         {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
         <Card.Actions>
-           
+           {console.log(this.state.uploading,'uppp')}
           {item?.quiz&&
-          <Button onPress={()=>this.upload(item,this.props.user)}>Upload </Button>
+          <Button onPress={()=>this.upload(item,this.props.user)}>
+            {this.state.uploading == false ? "Upload" : `uploading ${this.state.progress}`  } </Button>
           }
         </Card.Actions>
       </Card>
