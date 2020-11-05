@@ -306,8 +306,8 @@ class App extends React.Component {
                   component={TutorDetails}
                 />
               ) : 
-              this.state.user?.role == 'student' && this.state.user?.isRegister == false ?
-              <RootStack.Screen name='Student Account' options={{
+              this.state.user?.role == 'student' && !this.state.user?.name ?
+              <RootStack.Screen name='Student Detail' options={{
                 // headerShown:false
            }} component={StudentRegister} /> : 
            <RootStack.Screen name='Student Registered' options={{

@@ -131,7 +131,7 @@ console.log(item)
               console.log(quiz.pdfLink)
               let co = 'https://nextjs.org/docs/deployment'
               return (
-                  <Text> {index+1} </Text>
+                  <Text> Download </Text>
                 )
             })}
           {/* <Paragraph>Time & Date</Paragraph> */}
