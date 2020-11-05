@@ -67,7 +67,7 @@ class TutorProfile extends React.Component {
     const { user } = this.props;
     console.log({ object: this.props });
     if (!this.props.user?.name) {
-      this.props.navigation.replace("Tutor Details");
+      this.props.navigation.replace("Student Details");
     }
     console.log({ studen: this.state.students });
     return (

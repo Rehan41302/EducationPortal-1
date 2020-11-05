@@ -16,23 +16,24 @@ import { connect } from "react-redux";
 class TutorLogin extends React.Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    loading: false
   };
   static navigationOptions = {
     title: "Login"
   };
   userSignin(email, pass) {
+    this.setState({ loading: true });
     firebase
       .auth()
       .signInWithEmailAndPassword(email, pass)
       .then(() => {
         console.log("THEN");
-        // this.props.navigation.replace("Tutor Account", {
-        //   screen: "Tutor Profile"
-        // });
+        this.setState({ loading: false });
       })
       .catch(error => {
         console.log("Catch", error);
+        this.setState({ loading: false });
         Alert.alert(error.message);
       });
   }
@@ -82,8 +83,11 @@ class TutorLogin extends React.Component {
             onPress={() => {
               this.userSignin(this.state.email, this.state.password);
             }}
+            disabled={this.state.loading}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>
+              {this.state.loading ? "Loading..." : "Login"}
+            </Text>
           </TouchableOpacity>
 
           <Text style={{ textAlign: "center" }}>Don't have any account? </Text>
@@ -94,12 +98,14 @@ class TutorLogin extends React.Component {
                 params: { title: "Search History" }
               })
             }
+            disabled={this.state.loading}
           >
             <Text style={styles.touchtext}>Signup</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("Student Login")}
+            disabled={this.state.loading}
           >
             <Text style={styles.touchtext}>Are You Student?</Text>
           </TouchableOpacity>

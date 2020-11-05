@@ -46,6 +46,7 @@ export default class TutorSignUp extends React.Component {
           .catch(error => Alert.alert(error.message));
       })
       .catch(error => {
+        this.setState({ loading: false });
         console.log("CATCH", error);
         Alert.alert(error.message);
       });
