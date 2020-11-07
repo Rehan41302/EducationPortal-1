@@ -50,7 +50,7 @@ class TutorQuizView extends React.Component {
           /* Update the components state with query result */
           console.log(items, "av");
           setTimeout(() => {
-            this.setState({ data: arr });
+            this.setState({ data: filteredArr });
             //     store.dispatch(
             //         availableTuTors({
             //         //   ...doc.data(),
