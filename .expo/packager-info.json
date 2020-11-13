@@ -1,4 +1,10 @@
 {
-  "packagerPort": null,
-  "packagerPid": null
+  "packagerPort": 19001,
+  "packagerPid": 48682,
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://z2-jwd.rehansaeed.educationportal.exp.direct",
+  "packagerNgrokUrl": "https://packager.z2-jwd.rehansaeed.educationportal.exp.direct",
+  "ngrokPid": 48697,
+  "webpackServerPort": 19006
 }

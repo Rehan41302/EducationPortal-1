@@ -36,7 +36,8 @@ class QuizUpload extends React.Component {
         let storageRef = firebase.storage().ref();
         let ref = storageRef.child(`/quiz/${getTime}-${res.name}`);
         let fullPath = ref.fullPath;
-        let uploadTask = ref.putString(res.uri, "data_url");
+        // console.error({ res: res.uri });
+        let uploadTask = ref.putString(res.uri);
         // New Addintion
         uploadTask.on(
           "state_changed",

@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
-  Linking
+  Linking,
+  ActivityIndicator
 } from "react-native";
 import { connect } from "react-redux";
 import firebase from "../config/fire";
@@ -21,7 +22,8 @@ import store from "../store/store";
 class TutorQuizView extends React.Component {
   state = {
     uploading: false,
-    data: undefined
+    data: undefined,
+    loading: true
   };
 
   //  componentDidMount() {
@@ -50,7 +52,7 @@ class TutorQuizView extends React.Component {
           /* Update the components state with query result */
           console.log(items, "av");
           setTimeout(() => {
-            this.setState({ data: filteredArr });
+            this.setState({ data: filteredArr, loading: false });
             //     store.dispatch(
             //         availableTuTors({
             //         //   ...doc.data(),
@@ -101,8 +103,17 @@ class TutorQuizView extends React.Component {
             renderItem={this.renderItem}
             // keyExtractor={item => item.pdfLink}
           />
+        ) : this.state.loading ? (
+          <View style={styles.loaderView}>
+            <ActivityIndicator
+              size="large"
+              height="100%"
+              animating={true}
+              color="blue"
+            />
+          </View>
         ) : (
-          <Text>Loading...</Text>
+          <Text style={styles.center}> No Data Available.</Text>
         )}
       </ScrollView>
     );
@@ -132,6 +143,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F6F6"
   },
 
+  loaderView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 200
+    // flexDirection: "row"
+  },
+
   student: {
     marginTop: 9,
     marginBottom: 42,
@@ -139,5 +158,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     marginHorizontal: 52
+  },
+  center: {
+    textAlign: "center",
+    marginVertical: 200
   }
 });
