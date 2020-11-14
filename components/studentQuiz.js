@@ -152,7 +152,7 @@ console.log(item)
     );
   };
     render(){
-      console.log(this.props.tutors?.data,'tutorsol')
+      console.log(this.props.tutors?.data,'tutorsol',this.props.user)
    return(
     <ScrollView>
    

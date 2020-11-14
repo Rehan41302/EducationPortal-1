@@ -31,6 +31,7 @@ class AvailableTutors extends React.Component {
           /* Make data suitable for rendering */
           // items = JSON.stringify(items);
           arr.push(items);
+          // let result = items.students?.length > 0 &&  items.students.reduce(this.props.user.id)
           const result =
             items.students &&
             items.students.length > 0 &&
@@ -40,8 +41,12 @@ class AvailableTutors extends React.Component {
           if (result.length > 0) {
             filteredTutors.push(items);
           }
-          console.log({ filteredTutors });
-          if (items.tutors) filteredArr.push(items);
+          console.log(
+            result.length > 0 ? result[0] : "not",
+            "stt",
+            filteredTutors
+          );
+          if (items.students) filteredArr.push(items);
 
           /* Update the components state with query result */
           console.log(items, "av");
