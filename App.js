@@ -51,7 +51,8 @@ const StudentAuthStackScreen = createStackNavigator();
 const TopTabsStack = () => {
   return (
     <TopTabs.Navigator>
-      <TopTabs.Screen name='Tutors' component={AvailableTutors}  />
+      <TopTabs.Screen name='Tutors' options={{
+            headerShown:false}} component={AvailableTutors}  />
       <TopTabs.Screen name='Quiz' component={StudentQuiz}  />
       <TopTabs.Screen name='Online Class' component={StudentOnlineClass}  />
     </TopTabs.Navigator>
@@ -149,7 +150,11 @@ const RegisteredStudentStack = (user) => {
               // tabBarButton: () => SellBtn
           }}  component={StudentLogin} /> */}
           <StudentTabs.Screen name='Student Profile'  component={StudentProfile} />
-          <StudentTabs.Screen name='Study Materials'  component={TopTabsStack} />
+          <StudentTabs.Screen name='Study Materials' 
+          options={{
+            headerShown:false
+           }}
+            component={TopTabsStack} />
           {/* <StudentTabs.Screen name='Student Class'  component={StudentProfile} /> */}
           <TutorTabs.Screen name="Sign Out" component={SignOut} />
 
@@ -294,7 +299,7 @@ class App extends React.Component {
             }} component={auth} />  :
             this.state.user?.role == 'tutor' && this.state.user?.name ?
               <RootStack.Screen name='Tutor Account' options={{
-                   headerShown:false
+                  //  headerShown:false
               }} component={TutorAccountStack} /> : this.state.user?.role == "tutor" && !this.state.user?.name ? (
                 <RootStack.Screen
                   name="Tutor Details"
@@ -311,7 +316,7 @@ class App extends React.Component {
                 // headerShown:false
            }} component={StudentRegister} /> : 
            <RootStack.Screen name='Student Registered' options={{
-            headerShown:false
+            // headerShown:"Student"
        }} component={RegisteredStudentStack} />}  
           </RootStack.Navigator>
         </NavigationContainer>

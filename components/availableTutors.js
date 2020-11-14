@@ -12,6 +12,7 @@ import {availableTuTors} from '../store/actions/tutors'
     componentDidMount() {
         let arr =[]
         let filteredArr = []
+        let filteredTutors = []
          firebase.firestore().collection("tutors")
         .get().then(res=>{
             res.docs.forEach(doc => {
@@ -20,6 +21,15 @@ import {availableTuTors} from '../store/actions/tutors'
                 /* Make data suitable for rendering */
                 // items = JSON.stringify(items);
                 arr.push(items)
+                // let result = items.students?.length > 0 &&  items.students.reduce(this.props.user.id)
+                const result = items.students&& items.students.length>0 
+                &&items.students.filter(element => {
+                  return element == this.props.user.id
+                });
+                if(result.length>0){
+                  filteredTutors.push(items)
+                }
+                console.log(result.length>0 ? result[0] : 'not','stt',filteredTutors)
                 if(items.students)
                     filteredArr.push(items)
 
@@ -31,7 +41,7 @@ import {availableTuTors} from '../store/actions/tutors'
                         availableTuTors({
                         //   ...doc.data(),
                         //   id: user.uid,
-                          data:filteredArr
+                          data:filteredTutors
                         })
                       );           
                 }, 100);
